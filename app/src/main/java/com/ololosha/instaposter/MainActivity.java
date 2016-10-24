@@ -1,30 +1,20 @@
 package com.ololosha.instaposter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        String type = "image/*";
-        String filename = "/test2.jpg";
-        String mediaPath = Environment.getExternalStorageDirectory() + filename;
-        createInstagramIntent(type, mediaPath);
-
-        finish();
     }
 
 
