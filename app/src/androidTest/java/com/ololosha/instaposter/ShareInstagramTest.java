@@ -1,38 +1,25 @@
 package com.ololosha.instaposter;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilePermission;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.*;
 
 /**
  * You should run this test, while instagramm app with share image is open.
@@ -53,6 +40,7 @@ public class ShareInstagramTest {
         Context context = getInstrumentation().getTargetContext();
 
         URL url = new URL("http://pbs.twimg.com/media/CvORUlOWgAE-qQs.jpg");
+
         URLConnection connection = url.openConnection();
         InputStream input = connection.getInputStream();
 
@@ -100,20 +88,30 @@ public class ShareInstagramTest {
         // Context of the app under test.
         UiDevice device = UiDevice.getInstance(getInstrumentation());
 
-        // find next button
-        device.findObject(new UiSelector()
-                .resourceId("com.instagram.android:id/save"))
-                .clickAndWaitForNewWindow();
+        // toggle crop type to fill screen
+        clickButton("com.instagram.android:id/croptype_toggle_button");
 
+        // click next - wait for filter screen
+        clickButtonWaitNewWindow("com.instagram.android:id/save");
 
-        //click next button - final screen will appear
-        device.findObject(new UiSelector()
-                .resourceId("com.instagram.android:id/next_button_textview"))
-                .clickAndWaitForNewWindow();
+        // click next  - final screen will appear
+        clickButtonWaitNewWindow("com.instagram.android:id/next_button_textview");
 
-        //click "Share" button
+        // click "Share" - and it's done, mothefucker ;)
+        clickButtonWaitNewWindow("com.instagram.android:id/next_button_textview");
+    }
+
+    private void clickButtonWaitNewWindow(String resId) throws UiObjectNotFoundException {
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
         device.findObject(new UiSelector()
-                .resourceId("com.instagram.android:id/next_button_textview"))
+                .resourceId(resId))
                 .clickAndWaitForNewWindow();
+    }
+
+    private void clickButton(String resId) throws UiObjectNotFoundException {
+        UiDevice device = UiDevice.getInstance(getInstrumentation());
+        device.findObject(new UiSelector()
+                .resourceId(resId))
+                .click();
     }
 }
