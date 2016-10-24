@@ -1,0 +1,29 @@
+local.properties
+.gradle
+.idea
+*.iml
+bin
+gen
+build
+obfuscated
+proguard
+.DS_Store
+.gradle
+*.apk
+
+#proguard generated rules report
+app/config.txt
+
+#fastlane generated files
+fastlane/report.xml
+fastlane/.env
+fastlane/cookies.txt
+
+screenshots-ui-automation
+
+#google credentials
+GooglePlayAndroidDeveloper-Defendemus.json
+
+#Strongswan core sources
+core/native-vpn/strongswan/app/src/main/obj/
+core/native-vpn/strongswan/app/src/main/jni/strongswan/
