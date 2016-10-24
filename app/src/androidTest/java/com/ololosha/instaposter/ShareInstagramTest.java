@@ -29,6 +29,8 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  * adb shell am instrument -w -r   -e debug false -e class com.ololosha.instaposter.ShareInstagramTest#postPhoto com.ololosha.instaposter.test/android.support.test.runner.AndroidJUnitRunner
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ *
+ * Note
  */
 @RunWith(AndroidJUnit4.class)
 public class ShareInstagramTest {
@@ -47,7 +49,7 @@ public class ShareInstagramTest {
         String tmpFilename = "tmpUpload.jpg";
         //MODE_WORLD_READABLE is deprecated - but works for now, to fix this - we need to grant runtime permissions to write external storage
         //TODO add runtime permissions to external storage and get rid of MODE_WORLD_READABLE
-        FileOutputStream output = getInstrumentation().getTargetContext().openFileOutput(tmpFilename, Context.MODE_WORLD_READABLE);
+        FileOutputStream output = context.openFileOutput(tmpFilename, Context.MODE_WORLD_READABLE);
 
 
         //TODO add some error handling
@@ -62,13 +64,18 @@ public class ShareInstagramTest {
         input.close();
 
         File tmpFile = context.getFileStreamPath(tmpFilename);
-        openInstagramShareDir(tmpFile);
+        openInstagramShareDir(context, tmpFile);
 
         confirmShare();
     }
 
-    private void openInstagramShareDir(File imageFile) {
-        Context context = getInstrumentation().getTargetContext();
+    /**
+     * Opens instagramm share dialog, like it would user to clicl share in app.
+     * Instagram app should be able to open given file uri.
+     *
+     * @param imageFile file to share
+     */
+    private void openInstagramShareDir(Context context, File imageFile) {
 
         Uri fileUri = Uri.fromFile(imageFile);
         context.grantUriPermission(INSTAGRAM_PACKAGE, fileUri, FLAG_GRANT_READ_URI_PERMISSION);
@@ -84,6 +91,11 @@ public class ShareInstagramTest {
         context.startActivity(shareIntent);
     }
 
+    /**
+     * Main magic goes here - this simple method clicks all needed buttons in ui to satisfy user.
+     *
+     * @throws UiObjectNotFoundException
+     */
     private void confirmShare() throws UiObjectNotFoundException {
         // Context of the app under test.
         UiDevice device = UiDevice.getInstance(getInstrumentation());
